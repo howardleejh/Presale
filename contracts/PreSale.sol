@@ -42,7 +42,7 @@ contract PreSale is Ownable, ReentrancyGuard {
       address selected = participants[_randomNum()];
       winners.push(selected);
       isWinner[selected] = true;
-      winnerBalance[participants[_randomNum()]] = 1000 ether;
+      winnerBalance[selected] = 1000 ether;
     }
   }
 
