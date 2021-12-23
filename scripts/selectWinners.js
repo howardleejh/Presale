@@ -4,9 +4,6 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require('hardhat')
-const { ethers } = require('hardhat')
-const fs = require('fs')
-const json = require('../GeneratedAccounts.json')
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -21,14 +18,10 @@ async function main() {
   const Lottery = await LotteryContract.attach(
     '0x13d8db10b89416940af0B2fee43874712c2bEA81'
   )
-  let dataArr = []
-
-  json.forEach((item) => dataArr.push(item.wallet))
-
   let txRes = null
 
   try {
-    txRes = await Lottery.initParticipants(dataArr)
+    txRes = await Lottery.selectWinners()
 
     await txRes.wait()
   } catch (err) {

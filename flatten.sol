@@ -3,7 +3,6 @@
 // File @openzeppelin/contracts/utils/Context.sol@v4.4.1
 
 // SPDX-License-Identifier: MIT
-
 // OpenZeppelin Contracts v4.4.1 (utils/Context.sol)
 
 pragma solidity ^0.8.0;
@@ -149,7 +148,7 @@ contract Lottery is Ownable {
     participants.pop();
   }
 
-  function _randomNum() public view returns (uint256) {
+  function _randomNum() internal view returns (uint256) {
     require(participants.length > 0, 'There are no participants');
     uint256 randomNumber = uint256(
       keccak256(
