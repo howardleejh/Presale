@@ -14,12 +14,12 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const PreSaleContract = await hre.ethers.getContractFactory('PreSale')
-  const PreSale = await PreSaleContract.deploy()
+  const PresaleContract = await hre.ethers.getContractFactory('Presale')
+  const Presale = await PresaleContract.deploy()
 
-  await PreSale.deployed()
+  await Presale.deployed()
 
-  console.log('PreSale deployed to:', PreSale.address)
+  console.log('Presale deployed to:', Presale.address)
 }
 
 // We recommend this pattern to be able to use async/await everywhere

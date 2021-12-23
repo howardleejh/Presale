@@ -16,7 +16,7 @@ async function main() {
   // We get the contract to deploy
   const LotteryContract = await hre.ethers.getContractFactory('Lottery')
   const Lottery = await LotteryContract.attach(
-    '0x13d8db10b89416940af0B2fee43874712c2bEA81'
+    '0xBed56AF5016347D6ed18eA1894328465884Af893'
   )
   let txRes = null
 

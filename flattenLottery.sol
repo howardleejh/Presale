@@ -1,7 +1,6 @@
 // Sources flattened with hardhat v2.8.0 https://hardhat.org
 
 // File @openzeppelin/contracts/utils/Context.sol@v4.4.1
-
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (utils/Context.sol)
 
@@ -115,6 +114,7 @@ contract Lottery is Ownable {
   address[] public winners;
   mapping(address => bool) private isParticipating;
   bool public winnersSelected;
+  mapping(address => bool) public isWinner;
 
   function initParticipants(address[] memory _addresses) external onlyOwner {
     for (uint256 i = 0; i < _addresses.length; i++) {
@@ -143,6 +143,7 @@ contract Lottery is Ownable {
   function _pickWinner() internal {
     uint256 randomNum = _randomNum();
     address selected = participants[randomNum];
+    isWinner[selected] = true;
     winners.push(selected);
     participants[randomNum] = participants[participants.length - 1];
     participants.pop();
