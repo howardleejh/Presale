@@ -12,7 +12,7 @@ async function main() {
 
   const account = hre.ethers.Wallet.createRandom()
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 5000; i++) {
     const wallet = hre.ethers.Wallet.fromMnemonic(
       account._mnemonic().phrase,
       `m/44'/60'/0'/0/${i}`
@@ -25,7 +25,7 @@ async function main() {
   let jsonData = JSON.stringify(generatedAccounts)
   fs.writeFile('GeneratedAccounts.json', jsonData, function (err) {
     if (err) throw err
-    console.log('File created!')
+    console.log(`File created!`)
   })
 }
 

@@ -7,7 +7,6 @@ contract Lottery is Ownable {
   address[] public participants;
   address[] public winners;
   mapping(address => bool) private isParticipating;
-  bool public winnersSelected;
   mapping(address => bool) public isWinner;
 
   function initParticipants(address[] memory _addresses) external onlyOwner {
@@ -17,7 +16,6 @@ contract Lottery is Ownable {
   }
 
   function enterLottery(address _address) public {
-    require(winnersSelected == false, 'Winners has been selected');
     require(
       isParticipating[_address] == false,
       'you are already in the lottery'
@@ -26,12 +24,10 @@ contract Lottery is Ownable {
     isParticipating[_address] = true;
   }
 
-  function selectWinners() external onlyOwner {
-    require(winnersSelected == false, 'winners have been selected');
-    for (uint256 i = 0; i < 10; i++) {
+  function selectWinners(uint256 _winners) external onlyOwner {
+    for (uint256 i = 0; i < _winners; i++) {
       _pickWinner();
     }
-    winnersSelected = true;
   }
 
   function _pickWinner() internal {
@@ -46,9 +42,7 @@ contract Lottery is Ownable {
   function _randomNum() internal view returns (uint256) {
     require(participants.length > 0, 'There are no participants');
     uint256 randomNumber = uint256(
-      keccak256(
-        abi.encodePacked(block.timestamp, block.difficulty, participants)
-      )
+      keccak256(abi.encodePacked(block.timestamp, block.difficulty))
     ) % participants.length;
     return randomNumber;
   }
