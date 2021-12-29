@@ -42,7 +42,9 @@ contract Lottery is Ownable {
   function _randomNum() internal view returns (uint256) {
     require(participants.length > 0, 'There are no participants');
     uint256 randomNumber = uint256(
-      keccak256(abi.encodePacked(block.timestamp, block.difficulty))
+      keccak256(
+        abi.encodePacked(block.timestamp, block.difficulty, participants.length)
+      )
     ) % participants.length;
     return randomNumber;
   }
