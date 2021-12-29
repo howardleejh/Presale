@@ -19,11 +19,11 @@ async function main() {
   const LotteryContract = await hre.ethers.getContractFactory('Lottery')
   //@dev enter contract address
   const Lottery = await LotteryContract.attach(
-    '0xe12bECDeb2451c1F4667f7839b717A907A9023c6'
+    '0x7c52919982e3741DE3E53A63737139781C78Ddad'
   )
   const addresses = []
   let addressBatches = []
-  let batch = 250
+  let batch = 150
 
   //@dev getting all 5000 wallets into a local variable
   json.forEach((item) => addresses.push(item.wallet))
@@ -41,7 +41,6 @@ async function main() {
   addressBatches.forEach(async (item, index) => {
     try {
       let tx = await Lottery.initParticipants(item, {
-        gasLimit: 8000000,
         nonce: nonce + index,
       })
       console.log(tx)

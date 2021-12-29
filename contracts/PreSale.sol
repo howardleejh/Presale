@@ -20,7 +20,7 @@ contract Presale is Ownable, ReentrancyGuard {
   constructor() {
     costPrice = 0.01 ether;
     reward = 1000 ether;
-    tokens = new AwesomeTokens(10000 ether);
+    tokens = new AwesomeTokens(1000000 ether);
     tokens.whitelist(msg.sender);
     tokens.transferOwnership(msg.sender);
     lottery = new Lottery();
@@ -49,7 +49,7 @@ contract Presale is Ownable, ReentrancyGuard {
 
   function ownerWithdraw() external payable onlyOwner {
     require(
-      address(this).balance == 0.1 ether &&
+      address(this).balance == 10 ether &&
         tokens.balanceOf(address(this)) == 0 ether,
       'Presale has not ended yet'
     );

@@ -18,18 +18,15 @@ async function main() {
   const LotteryContract = await hre.ethers.getContractFactory('Lottery')
   //@dev enter contract address
   const Lottery = await LotteryContract.attach(
-    '0xe12bECDeb2451c1F4667f7839b717A907A9023c6'
+    '0x7c52919982e3741DE3E53A63737139781C78Ddad'
   )
   const [deployer] = await ethers.getSigners()
 
   let nonce = await deployer.getTransactionCount()
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 10; i++) {
     try {
-      let tx = await Lottery.selectWinners(50, {
-        gasLimit: 8000000,
-        nonce: nonce + i,
-      })
+      let tx = await Lottery.selectWinners(100, { nonce: nonce + i })
       console.log(tx)
     } catch (err) {
       return console.log(err)
