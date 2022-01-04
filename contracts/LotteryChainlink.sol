@@ -9,12 +9,11 @@ contract Lottery is Ownable, VRFConsumerBase {
   address[] public winners;
   mapping(address => bool) private isParticipating;
   mapping(address => bool) public isWinner;
+  bool public randNumGenerated;
   bytes32 internal keyHash;
   uint256 internal fee;
-  bool public randNumGenerated;
-  uint256 randomResult;
-  uint256 prevWinnerHash;
-  uint256 nonce;
+  uint256 internal randomResult;
+  uint256 internal prevWinnerHash;
 
   /**
    * Constructor inherits VRFConsumerBase
@@ -81,6 +80,7 @@ contract Lottery is Ownable, VRFConsumerBase {
     uint256 randNumHash;
     uint256 randNum;
     uint256 cycles;
+    uint256 nonce;
 
     if (prevWinnerHash == 0) {
       prevWinnerHash = randomResult;
@@ -90,6 +90,7 @@ contract Lottery is Ownable, VRFConsumerBase {
       randNumHash = uint256(keccak256(abi.encodePacked(prevWinnerHash, nonce)));
       randNum = randNumHash % participants.length;
       if (isWinner[participants[randNum]] == true) {
+        nonce++;
         continue;
       }
       _pickWinner(randNum);
