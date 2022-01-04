@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
+import '@openzeppelin/contracts/access/Ownable.sol';
+import '@chainlink/contracts/src/v0.8/VRFConsumerBase.sol';
 
 contract Lottery is Ownable, VRFConsumerBase {
-
   address[] public participants;
   address[] public winners;
   mapping(address => bool) private isParticipating;
@@ -15,7 +14,7 @@ contract Lottery is Ownable, VRFConsumerBase {
   bool public randNumGenerated;
   uint256 randomResult;
   uint256 prevWinnerHash;
-  uint256 nonce;  
+  uint256 nonce;
 
   /**
    * Constructor inherits VRFConsumerBase
@@ -39,10 +38,13 @@ contract Lottery is Ownable, VRFConsumerBase {
    * Requests randomness
    */
   function getRandomNumber() external onlyOwner returns (bytes32 requestId) {
-    require(randNumGenerated == false, "Random Number has already been generated");
+    require(
+      randNumGenerated == false,
+      'Random Number has already been generated'
+    );
     require(
       LINK.balanceOf(address(this)) >= fee,
-      "Not enough LINK - fill contract with faucet"
+      'Not enough LINK - fill contract with faucet'
     );
     randNumGenerated = true;
     return requestRandomness(keyHash, fee);
@@ -51,7 +53,10 @@ contract Lottery is Ownable, VRFConsumerBase {
   /**
    * Callback function used by VRF Coordinator
    */
-  function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
+  function fulfillRandomness(bytes32 requestId, uint256 randomness)
+    internal
+    override
+  {
     randomResult = randomness;
   }
 
@@ -64,39 +69,48 @@ contract Lottery is Ownable, VRFConsumerBase {
   function enterLottery(address _address) public {
     require(
       isParticipating[_address] == false,
-      "you are already in the lottery"
+      'you are already in the lottery'
     );
     participants.push(_address);
     isParticipating[_address] = true;
   }
 
-  function selectWinners(uint _winnerCount) external onlyOwner {
-      require(randomResult != 0, "generate a random number first");
+  function selectWinners(uint256 _winnerCount) external onlyOwner {
+    require(randomResult != 0, 'generate a random number first');
 
-      uint randNumHash;
-      uint randNum;
+    uint256 randNumHash;
+    uint256 randNum;
+    uint256 cycles;
 
-      if (prevWinnerHash == 0) {
-          prevWinnerHash = randomResult;
-      }
-
-    for (uint256 i = 0; i < _winnerCount; i++) {
-        randNumHash = uint256(keccak256(abi.encodePacked(prevWinnerHash, i, nonce)));
-        randNum = randNumHash % participants.length;
-        _pickWinner(randNum);
-        prevWinnerHash = randNumHash;
-        nonce++;
+    if (prevWinnerHash == 0) {
+      prevWinnerHash = randomResult;
     }
+
+    do {
+      randNumHash = uint256(keccak256(abi.encodePacked(prevWinnerHash, nonce)));
+      randNum = randNumHash % participants.length;
+      if (isWinner[participants[randNum]] == true) {
+        continue;
+      }
+      _pickWinner(randNum);
+      prevWinnerHash = randNumHash;
+      cycles++;
+      nonce++;
+    } while (cycles < _winnerCount);
   }
 
-  function _pickWinner(uint _randomNum) internal {
+  function _pickWinner(uint256 _randomNum) internal {
     address selected = participants[_randomNum];
     isWinner[selected] = true;
     winners.push(selected);
   }
 
-  function showWinners() external view returns(address[] memory) {
+  function showWinners() external view returns (address[] memory) {
     return winners;
+  }
+
+  function showWinnersCount() external view returns (uint256) {
+    return winners.length;
   }
 
   //@dev random function is replaced by VRF randomness
