@@ -24,8 +24,8 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 module.exports = {
   solidity: '0.8.4',
   networks: {
-    ropsten: {
-      url: process.env.ROPSTEN_URL || '',
+    kovan: {
+      url: process.env.KOVAN_URL || '',
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       gasMultiplier: 1.2,

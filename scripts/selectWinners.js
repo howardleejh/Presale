@@ -15,10 +15,12 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const LotteryContract = await hre.ethers.getContractFactory('Lottery')
+  const LotteryContract = await hre.ethers.getContractFactory(
+    'contracts/LotteryChainlink.sol:Lottery'
+  )
   //@dev enter contract address
   const Lottery = await LotteryContract.attach(
-    '0x7c52919982e3741DE3E53A63737139781C78Ddad'
+    '0x071e585C3e9436533D6aA8203682B7620F65Ebc1'
   )
   const [deployer] = await ethers.getSigners()
 

@@ -5,7 +5,7 @@ import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 import './AwesomeTokens.sol';
-import './Lottery.sol';
+import './LotteryChainlink.sol';
 
 contract Presale is Ownable, ReentrancyGuard {
   using SafeMath for uint256;
